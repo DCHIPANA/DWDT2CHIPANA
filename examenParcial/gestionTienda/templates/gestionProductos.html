@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión Tienda</title>
+    <!-- <link rel="stylesheet" href="{% static 'index.css' %}"> -->
+    {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+  </head>
+  <body>
+    <div class="container py-3">
+      <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a
+                    class="nav-link "
+                    aria-current="page"
+                    href="{% url 'gestionTienda:tiendas' %}"
+                    >Tiendas</a
+                  >
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'gestionTienda:productos' %}"
+                    >Productos</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <main>
+        <div class="row">
+          <div class="col-9">
+            <h2 class="h2 text-bold">Productos</h2>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_Nuevo">Nuevo Producto</button>
+          </div>
+        </div>
+        <div class="row">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Codigo</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Precio_venta</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Tienda_Relacionada</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for producto in listaProductos %}
+              <tr>
+                <td>{{ producto.Codigo }}</td>
+                <td>{{ producto.Descripcion }}</td>
+                <td>{{ producto.Precio_venta }}</td>
+                <td>{{ producto.Cantidad }}</td>
+                <td>{{ producto.Tienda_relacionada }}</td>
+                <td>
+                  <a type="button" class="btn btn-danger" href="{% url 'gestionTienda:eliminarProducto' producto.id %}">Eliminar</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+<!-- Modal Nuevo -->
+<div class="modal fade" id="modal_Nuevo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'gestionTienda:productos' %}">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar Producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          {% csrf_token %}
+          <div>
+            <label for="cod_producto" class="form-label">Código del Producto:</label>
+            <input type="text" name="cod_producto" class="form-control" required/>
+          </div>
+          <div>
+            <label for="des_producto" class="form-label">Descripción:</label>
+            <input id="desProducto" type="text" name="des_producto" class="form-control" required/>
+          </div>
+          <div>
+            <label for="pre_producto" class="form-label">Precio:</label>
+            <input id="preProducto" type="text" name="pre_producto" class="form-control" required/>
+          </div>
+          <div>
+            <label for="cant_producto" class="form-label">Cantidad:</label>
+            <input id="cantProducto" type="number" name="cant_producto" class="form-control" required/>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+  </body>
+</html>
